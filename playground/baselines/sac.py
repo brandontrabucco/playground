@@ -78,7 +78,7 @@ def sac(
             observation_dim + action_dim,
             1,
             hidden_size=variant["hidden_size"],
-            num_hidden_layers=variant["qf_learning_rate"]),
+            num_hidden_layers=variant["num_hidden_layers"]),
         optimizer_kwargs=dict(learning_rate=variant["qf_learning_rate"]),
         tau=variant["tau"],
         std=1.0)

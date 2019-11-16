@@ -50,8 +50,7 @@ class SAC(Algorithm):
         self.log_alpha = tf.Variable(math.log(abs(initial_alpha)), dtype=tf.float32)
         if alpha_optimizer_kwargs is None:
             alpha_optimizer_kwargs = {}
-        self.alpha_optimizer = alpha_optimizer(
-            [self.log_alpha], **alpha_optimizer_kwargs)
+        self.alpha_optimizer = alpha_optimizer(**alpha_optimizer_kwargs)
 
         # select into the observation dictionary
         self.observation_key = observation_key
