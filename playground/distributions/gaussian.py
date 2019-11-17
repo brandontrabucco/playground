@@ -94,3 +94,24 @@ class Gaussian(Distribution):
             - ((gaussian_samples - mean) / std) ** 2
             - log_std
             - tf.math.log(2 * math.pi), axis=(-1))
+
+    def kl_divergence(
+            self,
+            other,
+            *inputs
+    ):
+        # get the mean and the log standard deviation of the distribution
+        mean, log_std = self.get_parameters(*inputs)
+        std = tf.math.exp(log_std)
+
+        # get the mean and the log standard deviation of the other distribution
+        other_mean, other_log_std = other.get_parameters(*inputs)
+        other_std = tf.math.exp(other_log_std)
+
+        # compute the kl divergence between the distributions
+        return 0.5 * tf.reduce_sum(
+            - log_std
+            + other_log_std
+            - 1.0
+            + (std / other_std) ** 2
+            + ((other_mean - mean) / other_std) ** 2, axis=(-1))

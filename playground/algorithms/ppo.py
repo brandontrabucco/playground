@@ -79,17 +79,17 @@ class PPO(Algorithm):
             self.vf.apply_gradients(
                 self.vf.compute_gradients(vf_loss, tape))
 
+        # compute generalized advantages
+        delta_v = (rewards - values +
+                   self.discount * tf.pad(values, [[0, 0], [0, 1]])[:, 1:])
+        self.record("delta_v", tf.reduce_mean(delta_v).numpy())
+        advantages = discounted_sum(delta_v, self.discount * self.lamb)
+        self.record("advantages", tf.reduce_mean(advantages).numpy())
+
         # train the policy using generalized advantage estimation
         self.old_policy.set_weights(self.policy.get_weights())
         for i in range(self.off_policy_updates):
             with tf.GradientTape() as tape:
-
-                # compute generalized advantages
-                delta_v = (rewards - values +
-                           self.discount * tf.pad(values, [[0, 0], [0, 1]])[:, 1:])
-                self.record("delta_v", tf.reduce_mean(delta_v).numpy())
-                advantages = discounted_sum(delta_v, self.discount * self.lamb)
-                self.record("advantages", tf.reduce_mean(advantages).numpy())
 
                 # compute the importance sampling policy ratio
                 policy_ratio = tf.exp(self.policy.log_prob(actions, observations) -

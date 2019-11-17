@@ -114,6 +114,13 @@ class Distribution(ABC):
     ):
         return NotImplemented
 
+    @abstractmethod
+    def kl_divergence(
+            self,
+            *inputs
+    ):
+        return NotImplemented
+
     def prob(
             self,
             *inputs

@@ -92,3 +92,15 @@ class Categorical(Distribution):
         # compute the log probability density of the samples
         return tf.gather_nd(
             logits, categorical_samples, batch_dims=len(categorical_samples.shape))
+
+    def kl_divergence(
+            self,
+            other,
+            *inputs
+    ):
+        # get the mean and the log standard deviation of the distribution
+        log_probs = self.get_parameters(*inputs)
+        other_log_probs = other.get_parameters(*inputs)
+
+        # compute the log probability density of the samples
+        return tf.reduce_mean(tf.math.exp(log_probs) * (log_probs - other_log_probs), -1)

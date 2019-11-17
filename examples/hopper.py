@@ -11,12 +11,12 @@ if __name__ == "__main__":
     # parameters for the learning experiment
     variant = dict(
         max_num_steps=1000000,
-        logging_dir="hopper_2/sac/",
+        logging_dir="hopper/sac/",
         hidden_size=400,
         num_hidden_layers=2,
         reward_scale=1.0,
         discount=0.99,
-        initial_alpha=0.01,
+        initial_alpha=1.0,
         policy_learning_rate=0.0003,
         qf_learning_rate=0.0003,
         tau=0.005,
@@ -37,4 +37,4 @@ if __name__ == "__main__":
         sac,
         variant,
         HopperEnv,
-        num_seeds=5)
+        num_seeds=1)
